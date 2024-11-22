@@ -3,13 +3,14 @@ import { AuthService } from './auth.service';
 import { RegisterAuthDto } from './dto/register-auth.dto';
 import { LoginAuthDto } from './dto/login-auth.dto';
 import { LogoutAuthDto } from './dto/logout-auth.dto';
+import { User } from './models/user.schema';
 
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('register')
-  register(@Body() registerAuthDto: RegisterAuthDto) {
+  async register(@Body() registerAuthDto: RegisterAuthDto): Promise<User> {
     return this.authService.register(registerAuthDto);
   }
 
