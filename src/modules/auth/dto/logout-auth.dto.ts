@@ -1,3 +1,3 @@
 export class LogoutAuthDto {
-  id: string;
+  _id: string;
 }
