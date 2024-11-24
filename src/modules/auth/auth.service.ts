@@ -8,6 +8,7 @@ import { Model } from 'mongoose';
 import { compare } from 'bcryptjs';
 import { assignToken } from 'src/utils/assignToken';
 import { ConflictException, UnauthorizedException } from '@nestjs/common';
+import { TUserDocument } from 'src/types/User.types';
 
 @Injectable()
 export class AuthService {
@@ -26,7 +27,7 @@ export class AuthService {
   }
 
   async login(loginAuthDto: LoginAuthDto) {
-    const user = await this.userModel.findOne({
+    const user: TUserDocument = await this.userModel.findOne({
       email: loginAuthDto.email,
     });
 

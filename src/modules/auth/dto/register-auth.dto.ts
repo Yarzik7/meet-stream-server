@@ -1,5 +1,5 @@
 import { IsEmail, IsString, Length, Matches } from 'class-validator';
-import { IUser } from 'src/types/IUser.interface';
+import { IUser } from 'src/types/User.types';
 
 export class RegisterAuthDto implements Omit<IUser, '_id' | 'refreshToken'> {
   @IsString()

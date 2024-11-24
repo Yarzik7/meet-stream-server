@@ -13,7 +13,7 @@ export class AuthController {
     const registeredUser = (await this.authService.register(registerAuthDto)).toObject();
     delete registeredUser.password;
 
-    return { message: 'User successfully registered', data: registeredUser };
+    return registeredUser;
   }
 
   @Post('login')
