@@ -26,12 +26,12 @@ const UserSchema = SchemaFactory.createForClass(User);
 
 UserSchema.pre('save', async function (next) {
   const user = this as any;
-  console.log('user', user);
+
   if (!user.isModified('password')) {
     return next();
   }
+
   user.password = await hash(user.password, 12);
-  console.log('hpass', user.password);
   next();
 });
 

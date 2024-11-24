@@ -12,6 +12,7 @@ interface ITokens {
 
 export const assignToken = async (user: any): Promise<ITokens> => {
   const { ACCESS_TOKEN_SECRET, ACCESS_TOKEN_EXPIRES_IN, REFRESH_TOKEN_SECRET, REFRESH_TOKEN_EXPIRES_IN } = process.env;
+
   const payload: IPayload = {
     id: user._id,
     email: user.email,

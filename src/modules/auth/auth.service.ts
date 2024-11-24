@@ -7,28 +7,22 @@ import { User } from './models/user.schema';
 import { Model } from 'mongoose';
 import { compare } from 'bcryptjs';
 import { assignToken } from 'src/utils/assignToken';
-
-export interface IUserResponse {
-  message: string;
-}
+import { ConflictException, UnauthorizedException } from '@nestjs/common';
 
 @Injectable()
 export class AuthService {
   constructor(@InjectModel(User.name) private userModel: Model<User>) {}
 
-  async register(registerAuthDto: RegisterAuthDto): Promise<User | IUserResponse> {
+  async register(registerAuthDto: RegisterAuthDto) {
     const user = await this.userModel.findOne({ email: registerAuthDto.email });
 
     if (user) {
-      console.log('This user is exist');
-      return { message: 'This user is exist' };
+      throw new ConflictException('User with this email is exist!');
     }
 
-    const registeredUser = new this.userModel({
-      ...registerAuthDto,
-    });
+    const createdUser = new this.userModel(registerAuthDto);
 
-    return registeredUser.save();
+    return createdUser.save();
   }
 
   async login(loginAuthDto: LoginAuthDto) {
@@ -37,13 +31,13 @@ export class AuthService {
     });
 
     if (!user) {
-      console.log('User not found');
+      throw new UnauthorizedException('Email or password is incorrect!');
     }
 
     const isPasswordCorrect: boolean = await compare(loginAuthDto.password, user.password);
 
     if (!isPasswordCorrect) {
-      console.log('Email or password is incorrect');
+      throw new UnauthorizedException('Email or password is incorrect!');
     }
 
     const { accessToken, refreshToken } = await assignToken(user);

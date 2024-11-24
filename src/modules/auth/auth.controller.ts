@@ -3,18 +3,17 @@ import { AuthService } from './auth.service';
 import { RegisterAuthDto } from './dto/register-auth.dto';
 import { LoginAuthDto } from './dto/login-auth.dto';
 import { LogoutAuthDto } from './dto/logout-auth.dto';
-import { User } from './models/user.schema';
-import type { IUserResponse } from './auth.service';
 
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('register')
-  async register(
-    @Body() registerAuthDto: RegisterAuthDto,
-  ): Promise<User | IUserResponse> {
-    return this.authService.register(registerAuthDto);
+  async register(@Body() registerAuthDto: RegisterAuthDto) {
+    const registeredUser = (await this.authService.register(registerAuthDto)).toObject();
+    delete registeredUser.password;
+
+    return { message: 'User successfully registered', data: registeredUser };
   }
 
   @Post('login')
