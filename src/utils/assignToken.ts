@@ -1,5 +1,4 @@
 import { sign } from 'jsonwebtoken';
-import { User } from 'src/modules/auth/models/user.schema';
 
 interface IPayload {
   id: string;

@@ -1,9 +1,10 @@
 import { config } from 'dotenv';
-import { Module } from '@nestjs/common';
+import { Module, MiddlewareConsumer } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './modules/auth/auth.module';
 import { MongooseModule } from '@nestjs/mongoose';
+import { AuthMiddleware } from './middlewares/auth.middleware';
 
 config();
 
@@ -12,4 +13,8 @@ config();
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule {
+  // configure(consumer: MiddlewareConsumer) {
+  //   consumer.apply(AuthMiddleware).forRoutes('*');
+  // }
+}

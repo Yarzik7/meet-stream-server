@@ -5,7 +5,7 @@ import { LogoutAuthDto } from './dto/logout-auth.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { User } from './models/user.schema';
 import { Model } from 'mongoose';
-import { hash, compare } from 'bcryptjs';
+import { compare } from 'bcryptjs';
 import { assignToken } from 'src/utils/assignToken';
 
 export interface IUserResponse {
@@ -24,11 +24,8 @@ export class AuthService {
       return { message: 'This user is exist' };
     }
 
-    const hashedPassword = await hash(registerAuthDto.password, 12);
-
     const registeredUser = new this.userModel({
       ...registerAuthDto,
-      password: hashedPassword,
     });
 
     return registeredUser.save();
@@ -56,6 +53,8 @@ export class AuthService {
   }
 
   async logout(logoutAuthDto: LogoutAuthDto) {
-    await this.userModel.findByIdAndUpdate(logoutAuthDto._id, { refreshToken: null });
+    await this.userModel.findByIdAndUpdate(logoutAuthDto._id, {
+      refreshToken: null,
+    });
   }
 }
