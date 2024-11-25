@@ -1,3 +1,5 @@
+import type { TUserDocument } from 'src/types/User.types';
+
 export class LogoutAuthDto {
-  _id: string;
+  user: TUserDocument;
 }

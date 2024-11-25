@@ -1,4 +1,4 @@
-import { Controller, Post, Body } from '@nestjs/common';
+import { Controller, Post, Body, Req } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { RegisterAuthDto } from './dto/register-auth.dto';
 import { LoginAuthDto } from './dto/login-auth.dto';
@@ -23,9 +23,8 @@ export class AuthController {
   }
 
   @Post('logout')
-  async logout(@Body() logoutAuthDto: LogoutAuthDto) {
-    // await this.authService.logout(logoutAuthDto.user._id);
+  async logout(@Req() logoutAuthDto: LogoutAuthDto) {
     await this.authService.logout(logoutAuthDto);
-    return { message: 'Succes of logout' };
+    return { message: 'Success of logout' };
   }
 }

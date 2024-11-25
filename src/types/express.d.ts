@@ -1,9 +1,9 @@
-import type { UserDocument } from 'src/modules/auth/models/user.schema';
+import type { TUserDocument } from './User.types';
 
 declare global {
   namespace Express {
     interface Request {
-      user?: UserDocument;
+      user?: TUserDocument;
     }
   }
 }

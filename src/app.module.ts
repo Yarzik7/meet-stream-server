@@ -14,7 +14,7 @@ config();
   providers: [AppService],
 })
 export class AppModule {
-  // configure(consumer: MiddlewareConsumer) {
-  //   consumer.apply(AuthMiddleware).forRoutes('*');
-  // }
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(AuthMiddleware).forRoutes('auth/logout');
+  }
 }

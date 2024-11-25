@@ -48,7 +48,7 @@ export class AuthService {
   }
 
   async logout(logoutAuthDto: LogoutAuthDto) {
-    await this.userModel.findByIdAndUpdate(logoutAuthDto._id, {
+    await this.userModel.findByIdAndUpdate(logoutAuthDto.user._id, {
       refreshToken: null,
     });
   }

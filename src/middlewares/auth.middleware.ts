@@ -2,6 +2,7 @@ import { Injectable, NestMiddleware } from '@nestjs/common';
 import type { Request, Response, NextFunction } from 'express';
 import { decode, JwtPayload, TokenExpiredError, verify } from 'jsonwebtoken';
 import { User } from 'src/modules/auth/models/user.schema';
+import type { TUserDocument } from 'src/types/User.types';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { assignToken } from 'src/utils/assignToken';
@@ -19,16 +20,19 @@ export class AuthMiddleware implements NestMiddleware {
       return next(new Error('Unauthorized'));
     }
 
-    const payload = decode(token) as JwtPayload;
-    let fetchedUser;
+    const payload: JwtPayload = decode(token) as JwtPayload;
+    let fetchedUser: TUserDocument;
 
     try {
       fetchedUser = await this.userModel.findOne({ _id: payload.id });
+
       if (!fetchedUser || !fetchedUser.refreshToken) {
-        return next(new Error('Unathorized'));
+        return next(new Error('Unauthorized'));
       }
+
       verify(token, ACCESS_TOKEN_SECRET);
       req.user = fetchedUser;
+
       next();
     } catch (error) {
       if (!(error instanceof TokenExpiredError)) {
@@ -38,9 +42,11 @@ export class AuthMiddleware implements NestMiddleware {
       try {
         verify(fetchedUser.refreshToken, REFRESH_TOKEN_SECRET);
         const { accessToken, refreshToken } = await assignToken(fetchedUser);
+
         await this.userModel.findByIdAndUpdate(fetchedUser._id, { refreshToken });
+        
         res.json({ accessToken });
-      } catch (error) {
+      } catch (_) {
         return next(new Error('401 Refresh token is expired'));
       }
     }
