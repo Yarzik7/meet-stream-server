@@ -44,7 +44,7 @@ export class AuthService {
     const { accessToken, refreshToken } = await assignToken(user);
     await this.userModel.findByIdAndUpdate(user._id, { refreshToken });
 
-    return accessToken;
+    return { user: user.toObject(), accessToken };
   }
 
   async logout(logoutAuthDto: LogoutAuthDto) {
