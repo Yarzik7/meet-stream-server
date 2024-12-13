@@ -33,8 +33,10 @@ export class AuthController {
   @Get('current')
   async current(@Req() currentUserDto: LogoutAuthDto) {
     const currentUser = currentUserDto.user.toObject();
+
     delete currentUser.password;
     delete currentUser.refreshToken;
-    return currentUser;
+
+    return { user: currentUser };
   }
 }
