@@ -21,7 +21,7 @@ export class AuthMiddleware implements NestMiddleware {
       return next(new UnauthorizedException('Unauthorized'));
     }
 
-    const payload: JwtPayload = decode(token) as JwtPayload;
+    const payload: null | JwtPayload | string = decode(token);
     let fetchedUser: TUserDocument;
 
     try {
@@ -47,7 +47,7 @@ export class AuthMiddleware implements NestMiddleware {
         await this.userModel.findByIdAndUpdate(fetchedUser._id, { refreshToken });
 
         res.json({ accessToken });
-      } catch (_) {
+      } catch (error) {
         return next(new UnauthorizedException('Refresh token is expired'));
       }
     }
