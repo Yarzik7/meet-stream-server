@@ -1,13 +1,12 @@
 import { Injectable, NestMiddleware } from '@nestjs/common';
 import type { Request, Response, NextFunction } from 'express';
-import { decode, JwtPayload, TokenExpiredError, verify } from 'jsonwebtoken';
+import { decode, TokenExpiredError, verify } from 'jsonwebtoken';
 import { User } from 'src/modules/auth/models/user.schema';
 import type { TUserDocument } from 'src/types/User.types';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { assignToken } from 'src/utils/assignToken';
 import { UnauthorizedException } from '@nestjs/common';
-import { ITokenPayload } from 'src/types/Tokens.types';
 
 @Injectable()
 export class AuthMiddleware implements NestMiddleware {
