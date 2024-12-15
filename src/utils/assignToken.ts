@@ -1,21 +1,11 @@
 import { sign } from 'jsonwebtoken';
 import { TUserDocument } from 'src/types/User.types';
-import { Schema } from 'mongoose';
-
-interface IPayload {
-  id: Schema.Types.ObjectId;
-  email: string;
-}
-
-interface ITokens {
-  accessToken: string;
-  refreshToken: string;
-}
+import { ITokenPayload, ITokens } from 'src/types/Tokens.types';
 
 export const assignToken = async (user: TUserDocument): Promise<ITokens> => {
   const { ACCESS_TOKEN_SECRET, ACCESS_TOKEN_EXPIRES_IN, REFRESH_TOKEN_SECRET, REFRESH_TOKEN_EXPIRES_IN } = process.env;
 
-  const payload: IPayload = {
+  const payload: ITokenPayload = {
     id: user._id,
     email: user.email,
   };

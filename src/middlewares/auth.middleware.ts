@@ -7,6 +7,7 @@ import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { assignToken } from 'src/utils/assignToken';
 import { UnauthorizedException } from '@nestjs/common';
+import { ITokenPayload } from 'src/types/Tokens.types';
 
 @Injectable()
 export class AuthMiddleware implements NestMiddleware {
@@ -21,7 +22,21 @@ export class AuthMiddleware implements NestMiddleware {
       return next(new UnauthorizedException('Unauthorized'));
     }
 
-    const payload: null | JwtPayload | string = decode(token);
+    const payload: unknown = decode(token);
+
+    if (
+      !(
+        typeof payload === 'object' &&
+        payload !== null &&
+        'id' in payload &&
+        'email' in payload &&
+        typeof (payload as { id: unknown }).id === 'string' &&
+        typeof (payload as { email: unknown }).email === 'string'
+      )
+    ) {
+      return next(new Error('Invalid token payload'));
+    }
+
     let fetchedUser: TUserDocument;
 
     try {
