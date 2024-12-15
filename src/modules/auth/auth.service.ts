@@ -15,10 +15,18 @@ export class AuthService {
   constructor(@InjectModel(User.name) private userModel: Model<User>) {}
 
   async register(registerAuthDto: RegisterAuthDto) {
-    const user = await this.userModel.findOne({ email: registerAuthDto.email });
+    const user = await this.userModel.findOne({
+      $or: [{ email: registerAuthDto.email }, { username: registerAuthDto.username }],
+    });
 
     if (user) {
-      throw new ConflictException('User with this email is exist!');
+      if (user.username === registerAuthDto.username) {
+        throw new ConflictException('User with this username already exists!');
+      }
+
+      if (user.email === registerAuthDto.email) {
+        throw new ConflictException('User with this email already exists!');
+      }
     }
 
     const createdUser = new this.userModel(registerAuthDto);

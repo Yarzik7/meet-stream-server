@@ -44,19 +44,14 @@ export class AuthMiddleware implements NestMiddleware {
         verify(fetchedUser.refreshToken, REFRESH_TOKEN_SECRET);
         const { accessToken, refreshToken } = await assignToken(fetchedUser);
 
-        fetchedUser = await this.userModel.findByIdAndUpdate(fetchedUser._id, { refreshToken }, {new: true});
+        fetchedUser = await this.userModel.findByIdAndUpdate(fetchedUser._id, { refreshToken }, { new: true });
         const userResponse = fetchedUser.toObject();
 
-<<<<<<< HEAD
-        res.json({ accessToken });
-      } catch (error) {
-=======
         delete userResponse.password;
         delete userResponse.refreshToken;
 
         res.json({ user: userResponse, accessToken });
       } catch (_) {
->>>>>>> 509dd29e2b4d981f64a184ec03c0d8c01dd356fa
         return next(new UnauthorizedException('Refresh token is expired'));
       }
     }
