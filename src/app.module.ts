@@ -16,6 +16,6 @@ config();
 })
 export class AppModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(AuthMiddleware).forRoutes('auth/logout', 'auth/current');
+    consumer.apply(AuthMiddleware).forRoutes('auth/logout', 'auth/current', 'rooms/create-room');
   }
 }
