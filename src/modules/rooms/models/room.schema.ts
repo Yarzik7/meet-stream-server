@@ -6,7 +6,7 @@ export type RoomDocument = HydratedDocument<Room>;
 @Schema({ versionKey: false })
 class Room {
   @Prop({ required: true })
-  room_name: string;
+  owner: string;
 }
 
 const RoomSchema = SchemaFactory.createForClass(Room);

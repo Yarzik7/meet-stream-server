@@ -2,7 +2,7 @@ import { Schema, Document } from 'mongoose';
 
 interface IRoom {
   _id: Schema.Types.ObjectId;
-  room_name: string;
+  owner: string;
 }
 
 type TRoomDocument = IRoom & Document;
